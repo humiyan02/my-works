@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Works</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  /* レイアウト: 見出し + 作品カードのグリッド（スマホでは1列） */
+  :root {
+    --bg: #f5f7f6;
+    --surface: #ffffff;
+    --fg: #1c2624;
+    --muted: #5b6965;
+    --line: #d9e1de;
+    --accent: #1f7a68;
+    --accent-soft: #e2f1ec;
+    --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121816; --surface: #1a2220; --fg: #e6eeeb; --muted: #9aaba6;
+      --line: #2b3633; --accent: #5cc7ae; --accent-soft: #1d3530; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121816; --surface: #1a2220; --fg: #e6eeeb; --muted: #9aaba6;
+    --line: #2b3633; --accent: #5cc7ae; --accent-soft: #1d3530; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding-block: 56px 72px; display: grid; gap: 40px; }
+  header { display: grid; gap: 8px; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin: 0;
+  }
+  h1 { margin: 0; font-size: clamp(28px, 5vw, 40px); font-weight: 700; line-height: 1.25; text-wrap: balance; }
+  .lead { margin: 0; color: var(--muted); max-width: 36em; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .wrap { padding-block: 40px 56px; } }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 20px 22px; display: grid; gap: 6px; min-width: 0; height: 100%;
+    color: inherit; text-decoration: none;
+  }
+  a.card { transition: border-color .15s, transform .15s; }
+  a.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tag {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 4px;
+  }
+  .open { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .card h2 { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.4; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+  @media (prefers-reduced-motion: reduce) { a.card { transition: none; } a.card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <p class="eyebrow">Portfolio</p>
+    <h1>作品一覧</h1>
+    <p class="lead">これまでに作った小さなアプリやツールをまとめています。</p>
+  </header>
+
+  <ul class="grid" id="works" aria-label="作品"></ul>
+
+  <footer>4 作品を掲載しています。</footer>
+</main>
+
+<script>
+  // 作品データ。url に公開先のURLを書くと、カードがリンクになり新しいタブで開きます。
+  // url が空（null）の作品は、名前と説明だけを表示します。
+  var works = [
+    { name: "運勢ガチャ",   tag: "RANDOM", desc: "ボタンを押すと、今日の運勢がランダムで出るミニアプリです。", url: null },
+    { name: "見積もり計算", tag: "CALC",   desc: "単価と数量を入れると、税込みの見積もり金額を計算します。", url: null },
+    { name: "売上のグラフ", tag: "CHART",  desc: "月ごとの売上をグラフにして、増減をひと目で確認できます。", url: null },
+    { name: "日報まとめ",   tag: "REPORT", desc: "毎日の日報を、読みやすい形に整理してまとめます。",       url: null }
+  ];
+
+  var list = document.getElementById("works");
+  works.forEach(function (w) {
+    var li = document.createElement("li");
+    var card = document.createElement(w.url ? "a" : "div");
+    card.className = "card";
+    if (w.url) {
+      card.href = w.url;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+    }
+
+    var meta = document.createElement("div");
+    meta.className = "meta";
+    var tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = w.tag;
+    meta.appendChild(tag);
+    if (w.url) {
+      var open = document.createElement("span");
+      open.className = "open";
+      open.textContent = "開く ↗";
+      meta.appendChild(open);
+    }
+
+    var h2 = document.createElement("h2");
+    h2.textContent = w.name;
+    var p = document.createElement("p");
+    p.textContent = w.desc;
+
+    card.append(meta, h2, p);
+    li.appendChild(card);
+    list.appendChild(li);
+  });
+  document.querySelector("footer").textContent = works.length + " 作品を掲載しています。";
+</script>
+</body>
+</html>

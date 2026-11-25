@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers の設定（静的ファイルのみを配信）
+  "name": "my-works",
+  "compatibility_date": "2026-11-01",
+  // public/ の中身だけを公開する。README.md や設定ファイルは公開されない
+  "assets": {
+    "directory": "./public"
+  }
+}

@@ -5,5 +5,7 @@
   // public/ の中身だけを公開する。README.md や設定ファイルは公開されない
   "assets": {
     "directory": "./public"
-  }
+  },
+  // main 以外のブランチで確認用 URL（プレビュー）を出すための設定
+  "previews": {}
 }

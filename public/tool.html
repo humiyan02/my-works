@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>見積もり計算（卒業制作）</title>
+<style>
+  :root { --ink: #1c2530; --muted: #5d6a78; --line: #d9e0e7; --accent: #1f7a68; --bg: #f3f5f7; }
+  body { margin: 0; font-family: "Hiragino Sans", "Yu Gothic", sans-serif; background: var(--bg); color: var(--ink); }
+  main { max-width: 640px; margin: 40px auto; padding: 0 20px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  p.lead { color: var(--muted); margin: 0 0 24px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
+  label { display: block; font-size: 14px; color: var(--muted); margin: 12px 0 4px; }
+  input { width: 100%; box-sizing: border-box; font-size: 16px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; }
+  button { margin-top: 16px; font-size: 16px; padding: 10px 18px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; }
+  .result { margin-top: 20px; font-size: 20px; font-weight: 700; }
+  .note { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>見積もり計算</h1>
+  <p class="lead">品名・単価・数量を入れると、合計を出します。本物の見積書ではなく、架空の値で試してください。</p>
+  <div class="card">
+    <label for="item">品名</label>
+    <input id="item" value="サンプル商品A">
+    <label for="price">単価（円）</label>
+    <input id="price" type="number" min="0" value="1200">
+    <label for="qty">数量</label>
+    <input id="qty" type="number" min="0" value="1">
+    <button id="calc">合計を出す</button>
+    <div class="result" id="result" aria-live="polite"></div>
+    <p class="note">入力した値は保存しません。ページを開き直すと元に戻ります。</p>
+  </div>
+  <p><a href="./index.html">← 作品一覧へ戻る</a></p>
+</main>
+<script>
+  const yen = (n) => n.toLocaleString("ja-JP") + "円";
+  document.getElementById("calc").addEventListener("click", () => {
+    const item = document.getElementById("item").value.trim() || "（品名なし）";
+    const price = Math.max(0, Number(document.getElementById("price").value) || 0);
+    const qty = Math.max(0, Math.floor(Number(document.getElementById("qty").value) || 0));
+    document.getElementById("result").textContent = `${item}：合計 ${yen(price * qty)}`;
+  });
+</script>
+</body>
+</html>
